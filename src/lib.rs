@@ -1,6 +1,6 @@
 pub mod farm;
 
-use axum::{routing::get, Router, extract::State};
+use axum::{Router};
 use sqlx::{
     Pool,
     Postgres
@@ -17,13 +17,9 @@ impl AppState{
         Self { pool }
     }
 }
-async fn home(State(_state): State<AppState>) -> String {
-    "Home".to_string()
-}
 
 pub fn create_router(state: AppState) -> Router {
     Router::new()
-        .route("/", get(home))
         .nest("/farms", farm::farm_router())
         .with_state(state)
 }

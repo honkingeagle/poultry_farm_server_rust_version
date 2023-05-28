@@ -1,10 +1,11 @@
-use axum::{routing::get, Router};
+use axum::{routing::get, Router, extract::State };
 use crate::AppState;
-async fn list_farms() -> String {
+
+async fn list_farms(State(_state): State<AppState>) -> String {
     "Farms".to_string()
 }
 
-async fn view_farm() -> String {
+async fn view_farm(State(_state): State<AppState>) -> String {
     "Farm 1".to_string()
 }
 
