@@ -1,5 +1,5 @@
-use axum::{routing::get, Router, extract::State };
 use crate::AppState;
+use axum::{extract::State, routing::get, Router};
 
 async fn list_farms(State(_state): State<AppState>) -> String {
     "Farms".to_string()
@@ -12,5 +12,5 @@ async fn view_farm(State(_state): State<AppState>) -> String {
 pub fn farm_router() -> Router<AppState> {
     Router::new()
         .route("/", get(list_farms))
-        .route("/:id/show", get(view_farm))
+        .route("/:id", get(view_farm))
 }
