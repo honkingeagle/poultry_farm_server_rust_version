@@ -1,8 +1,8 @@
 use crate::AppState;
 use axum::{
     extract::{self, State},
-    http::{StatusCode},
-    response::{IntoResponse},
+    http::StatusCode,
+    response::IntoResponse,
     routing::{get, post},
     Router,
 };
