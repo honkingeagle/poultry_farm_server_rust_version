@@ -1,5 +1,5 @@
-pub mod farm;
-pub mod user;
+mod farm;
+mod user;
 
 use axum::Router;
 use sqlx::{Pool, Postgres};
@@ -18,6 +18,6 @@ impl AppState {
 pub fn create_router(state: AppState) -> Router {
     Router::new()
         .nest("/users", user::user_router())
-        .nest("/farms", farm::farm_router())
+        .nest("/farms", farm::farm_router(state.clone()))
         .with_state(state)
 }
