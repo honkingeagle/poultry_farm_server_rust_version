@@ -1,13 +1,18 @@
+mod all_farms;
+mod show_farm;
+mod new_farm;
+
 use crate::AppState;
 use axum::{
     extract::State,
     http::{Request, StatusCode},
     middleware::{self, Next},
     response::{IntoResponse, Response},
-    routing::get,
+    routing::{get, post},
     Router,
 };
 use axum_extra::extract::cookie::CookieJar;
+use serde::{Deserialize, Serialize};
 
 async fn validate_session_middleware<B>(
     State(state): State<AppState>,
@@ -42,18 +47,18 @@ async fn validate_session_middleware<B>(
             .into_response(),
     }
 }
-async fn list_farms(State(_state): State<AppState>) -> String {
-    "Farms".to_string()
-}
 
-async fn view_farm(State(_state): State<AppState>) -> String {
-    "Farm 1".to_string()
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Farm {
+    id: i32,
+    name: String,
 }
 
 pub fn farm_router(state: AppState) -> Router<AppState> {
     Router::new()
-        .route("/", get(list_farms))
-        .route("/:id", get(view_farm))
+        .route("/:user_id", get(all_farms::list_farms))
+        .route("/:user_id/farm/:farm_id", get(show_farm::view_farm))
+        .route("/new", post(new_farm::create_farm))
         .route_layer(middleware::from_fn_with_state(
             state,
             validate_session_middleware,
