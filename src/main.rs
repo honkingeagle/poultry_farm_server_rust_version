@@ -9,7 +9,8 @@ async fn axum(#[shuttle_secrets::Secrets] secrets: SecretStore) -> shuttle_axum:
         .max_connections(5)
         .connect(&secrets.get("DATABASE_URL").unwrap())
         .await
-        .unwrap_or_else(|err| {
+        .unwrap_or_else(|err| {//could have used .expect() because the error is programmer specific:
+            //Just needed to practice using unwrap_or_else
             println!("Unable to load database_url: {err}");
             process::exit(1);
         });
