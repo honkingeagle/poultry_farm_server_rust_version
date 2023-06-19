@@ -9,8 +9,8 @@ pub struct AppState {
     pool: Pool<Postgres>,
 }
 
-impl AppState {
-    pub fn new(pool: Pool<Postgres>) -> Self {
+impl From<Pool<Postgres>> for AppState {
+    fn from(pool: Pool<Postgres>) -> Self {
         Self { pool }
     }
 }

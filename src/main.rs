@@ -23,7 +23,7 @@ async fn axum(#[shuttle_secrets::Secrets] secrets: SecretStore) -> shuttle_axum:
             process::exit(1);
         });
 
-    let state = AppState::new(pool);
+    let state: AppState = pool.into();
 
     let router = poultry_farm_server::create_router(state);
 
