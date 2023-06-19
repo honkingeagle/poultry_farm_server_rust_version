@@ -22,7 +22,9 @@ async fn axum(#[shuttle_secrets::Secrets] secrets: SecretStore) -> shuttle_axum:
             println!("Unable to migrate sql files: {err}");
             process::exit(1);
         });
-
+    
+    //Used the Into and From trait to create a new instance of
+    // AppState instead of the normal AppState::new() associative function
     let state: AppState = pool.into();
 
     let router = poultry_farm_server::create_router(state);
