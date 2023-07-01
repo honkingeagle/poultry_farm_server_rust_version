@@ -11,7 +11,7 @@ async fn axum(#[shuttle_secrets::Secrets] secrets: SecretStore) -> shuttle_axum:
         .await
         .unwrap_or_else(|err| {//could have used .expect() because the error is programmer specific:
             //Just needed to practice using unwrap_or_else
-            println!("Unable to load database_url: {err}");
+            eprintln!("Unable to load database_url: {err}");
             process::exit(1);
         });
 
@@ -19,7 +19,7 @@ async fn axum(#[shuttle_secrets::Secrets] secrets: SecretStore) -> shuttle_axum:
         .run(&pool)
         .await
         .unwrap_or_else(|err| {
-            println!("Unable to migrate sql files: {err}");
+            eprintln!("Unable to migrate sql files: {err}");
             process::exit(1);
         });
     
