@@ -1,5 +1,6 @@
 mod farm;
 mod user;
+mod validate_session;
 
 use axum::Router;
 use sqlx::{Pool, Postgres};
