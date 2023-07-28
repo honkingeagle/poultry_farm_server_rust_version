@@ -1,5 +1,5 @@
 use super::User;
-use crate::{email::welcome, AppState};
+use crate::AppState;
 use axum::{
     extract::{self, State},
     http::StatusCode,
