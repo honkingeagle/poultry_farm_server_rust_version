@@ -3,7 +3,7 @@ use lettre::message::header::ContentType;
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
 
-pub fn email(state: AppState, mail: &str) {
+pub async fn mail(state: AppState, mail: &str) {
     let email = Message::builder()
         .from("noreply <nobody@gardenofeden.rs>".parse().unwrap())
         .to(mail.parse().unwrap())

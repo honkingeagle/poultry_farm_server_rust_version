@@ -1,5 +1,5 @@
 use super::User;
-use crate::AppState;
+use crate::{email::welcome, AppState};
 use axum::{
     extract::{self, State},
     http::StatusCode,
@@ -19,7 +19,7 @@ pub async fn register(
 
     match query {
         Ok(_) => {
-            // email::welcome::email(state.clone(), &new_user.email);
+            welcome::mail(state.clone(), &new_user.email).await;
             Ok((StatusCode::CREATED, "Account created!".to_string()))
         }
         Err(e) => Err((
