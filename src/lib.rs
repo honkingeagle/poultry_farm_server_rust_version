@@ -1,3 +1,4 @@
+mod email;
 mod farm;
 mod user;
 mod validate_session;
@@ -8,11 +9,17 @@ use sqlx::{Pool, Postgres};
 #[derive(Clone)]
 pub struct AppState {
     pool: Pool<Postgres>,
+    smtp_email: String,
+    smtp_password: String,
 }
 
-impl From<Pool<Postgres>> for AppState {
-    fn from(pool: Pool<Postgres>) -> Self {
-        Self { pool }
+impl AppState {
+    pub fn new(pool: Pool<Postgres>, smtp_email: String, smtp_password: String) -> AppState {
+        AppState {
+            pool,
+            smtp_email,
+            smtp_password,
+        }
     }
 }
 

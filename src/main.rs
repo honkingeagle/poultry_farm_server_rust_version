@@ -9,23 +9,20 @@ async fn axum(#[shuttle_secrets::Secrets] secrets: SecretStore) -> shuttle_axum:
         .max_connections(5)
         .connect(&secrets.get("DATABASE_URL").unwrap())
         .await
-        .unwrap_or_else(|err| {//could have used .expect() because the error is programmer specific:
-            //Just needed to practice using unwrap_or_else
+        .unwrap_or_else(|err| {
             eprintln!("Unable to load database_url: {err}");
             process::exit(1);
         });
 
-    sqlx::migrate!()
-        .run(&pool)
-        .await
-        .unwrap_or_else(|err| {
-            eprintln!("Unable to migrate sql files: {err}");
-            process::exit(1);
-        });
-    
-    //Used the Into and From trait to create a new instance of
-    // AppState instead of the normal AppState::new() associative function
-    let state: AppState = pool.into();
+    sqlx::migrate!().run(&pool).await.unwrap_or_else(|err| {
+        eprintln!("Unable to migrate sql files: {err}");
+        process::exit(1);
+    });
+
+    let smtp_email = secrets.get("SMTP_EMAIL").unwrap();
+    let smtp_password = secrets.get("SMTP_PASSWORD").unwrap();
+    // Changed backed to AppState::new()
+    let state = AppState::new(pool, smtp_email, smtp_password);
 
     let router = poultry_farm_server::create_router(state);
 

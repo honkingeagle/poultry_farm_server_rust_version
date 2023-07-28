@@ -18,11 +18,6 @@ CREATE TABLE IF NOT EXISTS farms (
     updatedAt timestamp default current_timestamp
 );
 
-CREATE TABLE IF NOT EXISTS user_farms (
-    user_id int references users(id),
-    farm_id int references farms(id)
-);
-
 CREATE TABLE IF NOT EXISTS sessions (
     id serial primary key,
     session_id varchar unique not null,

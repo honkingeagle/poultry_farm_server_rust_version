@@ -1,16 +1,14 @@
 mod all_farms;
-mod show_farm;
 mod new_farm;
+mod show_farm;
 
-use crate::{AppState, validate_session};
+use crate::{validate_session, AppState};
 use axum::{
     middleware,
     routing::{get, post},
     Router,
 };
 use serde::{Deserialize, Serialize};
-
-
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Farm {
