@@ -1,7 +1,7 @@
 mod email;
 mod farm;
 mod user;
-mod validate_session;
+mod middleware;
 
 use axum::Router;
 use sqlx::{Pool, Postgres};

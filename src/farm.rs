@@ -2,7 +2,7 @@ mod all_farms;
 mod new_farm;
 mod show_farm;
 
-use crate::{validate_session, AppState};
+use crate::{middleware::session, AppState};
 use axum::{
     middleware,
     routing::{get, post},
@@ -23,6 +23,6 @@ pub fn farm_router(state: AppState) -> Router<AppState> {
         .route("/new", post(new_farm::create_farm))
         .route_layer(middleware::from_fn_with_state(
             state,
-            validate_session::validate_session_middleware,
+            session::validate,
         ))
 }

@@ -7,7 +7,7 @@ use axum::{
 };
 use axum_extra::extract::cookie::CookieJar;
 
-pub async fn validate_session_middleware<B>(
+pub async fn validate<B>(
     State(state): State<AppState>,
     jar: CookieJar,
     request: Request<B>,
