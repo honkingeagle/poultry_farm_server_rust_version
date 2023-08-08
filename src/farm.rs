@@ -21,8 +21,5 @@ pub fn farm_router(state: AppState) -> Router<AppState> {
         .route("/:user_id", get(all_farms::list_farms))
         .route("/:user_id/farm/:farm_id", get(show_farm::view_farm))
         .route("/new", post(new_farm::create_farm))
-        .route_layer(middleware::from_fn_with_state(
-            state,
-            session::validate,
-        ))
+        .route_layer(middleware::from_fn_with_state(state, session::validate))
 }
