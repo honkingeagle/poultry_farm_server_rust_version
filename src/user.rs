@@ -1,3 +1,4 @@
+mod activate;
 mod create_user;
 mod login_user;
 mod logout_user;
@@ -20,4 +21,5 @@ pub fn user_router() -> Router<AppState> {
         .route("/register", post(create_user::register))
         .route("/login", post(login_user::login))
         .route("/logout", get(logout_user::logout))
+        .route("/activate/:email/:token", post(activate::account))
 }
