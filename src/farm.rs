@@ -9,6 +9,7 @@ use axum::{
     Router,
 };
 use serde::{Deserialize, Serialize};
+use std::sync::Arc;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Farm {
@@ -16,7 +17,7 @@ pub struct Farm {
     name: String,
 }
 
-pub fn farm_router(state: AppState) -> Router<AppState> {
+pub fn farm_router(state: Arc<AppState>) -> Router<Arc<AppState>> {
     Router::new()
         .route("/:user_id", get(all_farms::list_farms))
         .route("/:user_id/farm/:farm_id", get(show_farm::view_farm))

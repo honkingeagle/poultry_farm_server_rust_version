@@ -6,9 +6,10 @@ use axum::{
 };
 use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
 use sqlx::Row;
+use std::sync::Arc;
 
 pub async fn login(
-    State(state): State<AppState>,
+    State(state): State<Arc<AppState>>,
     jar: CookieJar,
     extract::Json(user): extract::Json<User>,
 ) -> Result<(CookieJar, StatusCode), (StatusCode, String)> {

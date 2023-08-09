@@ -2,14 +2,15 @@ use crate::AppState;
 use lettre::message::header::ContentType;
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
+use std::sync::Arc;
 
-pub async fn mail(state: AppState, mail: &str) {
+pub async fn mail(state: Arc<AppState>, mail: &str) {
     let activation_token: u128 = rand::random();
 
     let activation_token = activation_token.to_string();
 
     let query = sqlx::query("INSERT INTO activations (email, activation_id) VALUES ($1, $2)")
-        .bind(mail)
+        .bind(&mail)
         .bind(&activation_token)
         .execute(&state.pool)
         .await;
@@ -31,7 +32,7 @@ pub async fn mail(state: AppState, mail: &str) {
                 </div>"
                 ))
                 .unwrap();
-            let creds = Credentials::new(state.smtp_email, state.smtp_password);
+            let creds = Credentials::new(state.smtp_email.to_string(), state.smtp_password.to_string());
 
             let mailer = SmtpTransport::relay("smtp.gmail.com")
                 .unwrap()

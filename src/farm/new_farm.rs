@@ -5,8 +5,9 @@ use axum::{
     http::StatusCode,
     Json,
 };
+use std::sync::Arc;
 pub async fn create_farm(
-    State(state): State<AppState>,
+    State(state): State<Arc<AppState>>,
     extract::Json(farm_with_user_id): Json<Farm>,
 ) -> Result<(StatusCode, String), (StatusCode, String)> {
     let query = sqlx::query("INSERT INTO farms (name, user_id) VALUES ($1, $2)")

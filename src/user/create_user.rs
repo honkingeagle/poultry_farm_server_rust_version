@@ -4,9 +4,10 @@ use axum::{
     extract::{self, State},
     http::StatusCode,
 };
+use std::sync::Arc;
 
 pub async fn register(
-    State(state): State<AppState>,
+    State(state): State<Arc<AppState>>,
     extract::Json(new_user): extract::Json<User>,
 ) -> Result<(StatusCode, String), (StatusCode, String)> {
     let hashed_password = bcrypt::hash(new_user.password, 11).expect("Unable to hash password");
@@ -19,7 +20,7 @@ pub async fn register(
 
     match query {
         Ok(_) => {
-            welcome::mail(state.clone(), &new_user.email).await;
+            welcome::mail(Arc::clone(&state), &new_user.email).await;
             Ok((StatusCode::CREATED, "Account created!".to_string()))
         }
         Err(e) => Err((

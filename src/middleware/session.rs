@@ -6,9 +6,9 @@ use axum::{
     response::{IntoResponse, Response},
 };
 use axum_extra::extract::cookie::CookieJar;
-
+use std::sync::Arc;
 pub async fn validate<B>(
-    State(state): State<AppState>,
+    State(state): State<Arc<AppState>>,
     jar: CookieJar,
     request: Request<B>,
     next: Next<B>,

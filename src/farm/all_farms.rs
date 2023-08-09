@@ -6,9 +6,10 @@ use axum::{
     Json,
 };
 use sqlx::Row;
+use std::sync::Arc;
 
 pub async fn list_farms(
-    State(state): State<AppState>,
+    State(state): State<Arc<AppState>>,
     Path(user_id): Path<i32>,
 ) -> Result<(StatusCode, Json<Vec<Farm>>), (StatusCode, String)> {
     let query = sqlx::query("SELECT * FROM farms WHERE user_id = $1")

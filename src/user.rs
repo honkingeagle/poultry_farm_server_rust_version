@@ -4,6 +4,7 @@ mod login_user;
 mod logout_user;
 
 use crate::AppState;
+use std::sync::Arc;
 use axum::{
     routing::{get, post},
     Router,
@@ -16,7 +17,7 @@ pub struct User {
     password: String,
 }
 
-pub fn user_router() -> Router<AppState> {
+pub fn user_router() -> Router<Arc<AppState>> {
     Router::new()
         .route("/register", post(create_user::register))
         .route("/login", post(login_user::login))
