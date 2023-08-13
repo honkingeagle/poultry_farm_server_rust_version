@@ -26,6 +26,7 @@ impl AppState {
         }
     }
 }
+type SharedState = Arc<AppState>;
 
 pub fn create_router(state: AppState) -> Router {
     let cors = CorsLayer::new()

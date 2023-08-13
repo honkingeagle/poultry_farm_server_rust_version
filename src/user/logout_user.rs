@@ -1,10 +1,9 @@
-use crate::AppState;
+use crate::SharedState;
 use axum::{extract::State, http::StatusCode};
 use axum_extra::extract::cookie::{Cookie, CookieJar};
-use std::sync::Arc;
 
 pub async fn logout(
-    State(state): State<Arc<AppState>>,
+    State(state): State<SharedState>,
     jar: CookieJar,
 ) -> Result<CookieJar, StatusCode> {
     let poultry_farm_cookie = jar

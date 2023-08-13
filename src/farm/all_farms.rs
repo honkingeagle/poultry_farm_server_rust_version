@@ -1,15 +1,14 @@
 use super::Farm;
-use crate::AppState;
+use crate::SharedState;
 use axum::{
     extract::{Path, State},
     http::StatusCode,
     Json,
 };
 use sqlx::Row;
-use std::sync::Arc;
 
 pub async fn list_farms(
-    State(state): State<Arc<AppState>>,
+    State(state): State<SharedState>,
     Path(user_id): Path<i32>,
 ) -> Result<(StatusCode, Json<Vec<Farm>>), (StatusCode, String)> {
     let query = sqlx::query("SELECT * FROM farms WHERE user_id = $1")

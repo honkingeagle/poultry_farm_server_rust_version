@@ -1,12 +1,10 @@
-use crate::AppState;
+use crate::SharedState;
 use axum::{
     extract::{Path, State},
     http::StatusCode,
 };
-use std::sync::Arc;
-
 pub async fn account(
-    State(state): State<Arc<AppState>>,
+    State(state): State<SharedState>,
     Path((email, token)): Path<(String, String)>,
 ) -> Result<(StatusCode, String), (StatusCode, String)> {
     let query = sqlx::query("SELECT * FROM activations WHERE email = $1 AND activation_id = $2")

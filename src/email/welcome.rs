@@ -1,10 +1,9 @@
-use crate::AppState;
+use crate::SharedState;
 use lettre::message::header::ContentType;
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
-use std::sync::Arc;
 
-pub async fn mail(state: Arc<AppState>, mail: &str) {
+pub async fn mail(state: SharedState, mail: &str) {
     let activation_token: u128 = rand::random();
 
     let activation_token = activation_token.to_string();

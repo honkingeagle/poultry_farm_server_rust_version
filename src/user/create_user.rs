@@ -1,5 +1,5 @@
 use super::User;
-use crate::{email::welcome, AppState};
+use crate::{email::welcome, SharedState};
 use axum::{
     extract::{self, State},
     http::StatusCode,
@@ -7,7 +7,7 @@ use axum::{
 use std::sync::Arc;
 
 pub async fn register(
-    State(state): State<Arc<AppState>>,
+    State(state): State<SharedState>,
     extract::Json(new_user): extract::Json<User>,
 ) -> Result<(StatusCode, String), (StatusCode, String)> {
     let hashed_password = bcrypt::hash(new_user.password, 11).expect("Unable to hash password");

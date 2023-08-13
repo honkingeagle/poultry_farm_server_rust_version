@@ -3,8 +3,7 @@ mod create_user;
 mod login_user;
 mod logout_user;
 
-use crate::AppState;
-use std::sync::Arc;
+use crate::SharedState;
 use axum::{
     routing::{get, post},
     Router,
@@ -17,7 +16,7 @@ pub struct User {
     password: String,
 }
 
-pub fn user_router() -> Router<Arc<AppState>> {
+pub fn user_router() -> Router<SharedState> {
     Router::new()
         .route("/register", post(create_user::register))
         .route("/login", post(login_user::login))

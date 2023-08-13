@@ -1,15 +1,14 @@
 use super::User;
-use crate::AppState;
+use crate::SharedState;
 use axum::{
     extract::{self, State},
     http::StatusCode,
 };
 use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
 use sqlx::Row;
-use std::sync::Arc;
 
 pub async fn login(
-    State(state): State<Arc<AppState>>,
+    State(state): State<SharedState>,
     jar: CookieJar,
     extract::Json(user): extract::Json<User>,
 ) -> Result<(CookieJar, StatusCode), (StatusCode, String)> {

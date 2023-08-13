@@ -2,14 +2,13 @@ mod all_farms;
 mod new_farm;
 mod show_farm;
 
-use crate::{middleware::session, AppState};
+use crate::{middleware::session, SharedState};
 use axum::{
     middleware,
     routing::{get, post},
     Router,
 };
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Farm {
@@ -17,7 +16,7 @@ pub struct Farm {
     name: String,
 }
 
-pub fn farm_router(state: Arc<AppState>) -> Router<Arc<AppState>> {
+pub fn farm_router(state: SharedState) -> Router<SharedState> {
     Router::new()
         .route("/:user_id", get(all_farms::list_farms))
         .route("/:user_id/farm/:farm_id", get(show_farm::view_farm))

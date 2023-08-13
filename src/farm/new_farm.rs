@@ -1,13 +1,12 @@
 use super::Farm;
-use crate::AppState;
+use crate::SharedState;
 use axum::{
     extract::{self, State},
     http::StatusCode,
     Json,
 };
-use std::sync::Arc;
 pub async fn create_farm(
-    State(state): State<Arc<AppState>>,
+    State(state): State<SharedState>,
     extract::Json(farm_with_user_id): Json<Farm>,
 ) -> Result<(StatusCode, String), (StatusCode, String)> {
     let query = sqlx::query("INSERT INTO farms (name, user_id) VALUES ($1, $2)")
