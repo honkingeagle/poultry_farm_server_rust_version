@@ -1,10 +1,9 @@
 use super::User;
-use crate::{email::welcome, SharedState};
+use crate::SharedState;
 use axum::{
     extract::{self, State},
     http::StatusCode,
 };
-use std::sync::Arc;
 
 pub async fn register(
     State(state): State<SharedState>,
@@ -20,7 +19,6 @@ pub async fn register(
 
     match query {
         Ok(_) => {
-            welcome::mail(Arc::clone(&state), &new_user.email).await;
             Ok((StatusCode::CREATED, "Account created!".to_string()))
         }
         Err(e) => Err((

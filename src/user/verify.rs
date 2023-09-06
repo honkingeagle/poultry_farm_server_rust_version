@@ -1,22 +1,29 @@
 use crate::SharedState;
 use axum::{
-    extract::{Path, State},
+    extract::{Json, State},
     http::StatusCode,
 };
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize)]
+pub struct NewUser {
+    email: String,
+    token: String
+}
 pub async fn account(
     State(state): State<SharedState>,
-    Path((email, token)): Path<(String, String)>,
+    Json(new_user): Json<NewUser>,
 ) -> Result<(StatusCode, String), (StatusCode, String)> {
     let query = sqlx::query("SELECT * FROM activations WHERE email = $1 AND activation_id = $2")
-        .bind(&email)
-        .bind(&token)
+        .bind(&new_user.email)
+        .bind(&new_user.token)
         .fetch_optional(&state.pool)
         .await;
 
     match query {
         Ok(_) => {
             let query = sqlx::query("UPDATE users SET active = TRUE WHERE email = $1")
-                .bind(email)
+                .bind(new_user.email)
                 .execute(&state.pool)
                 .await;
 

@@ -21,8 +21,9 @@ async fn axum(#[shuttle_secrets::Secrets] secrets: SecretStore) -> shuttle_axum:
 
     let smtp_email = secrets.get("SMTP_EMAIL").unwrap();
     let smtp_password = secrets.get("SMTP_PASSWORD").unwrap();
+    let frontend_url = secrets.get("DEV_FRONTEND_URL").unwrap();
     // Changed backed to AppState::new()
-    let state = AppState::new(pool, smtp_email, smtp_password);
+    let state = AppState::new(pool, smtp_email, smtp_password, frontend_url);
 
     let router = poultry_farm_server::create_router(state);
 

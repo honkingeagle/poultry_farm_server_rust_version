@@ -42,8 +42,8 @@ pub async fn login(
                         .expect("Unable to insert session");
     
                         let cookie = Cookie::build("crusty_chicken", session_id.to_string())
-                            .secure(false)
-                            .same_site(SameSite::Strict)
+                            .secure(true)
+                            .same_site(SameSite::None)
                             .http_only(true)
                             .path("/")
                             .finish();
