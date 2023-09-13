@@ -17,7 +17,6 @@ pub async fn validate<B>(
         .get("crusty_chicken")
         .map(|cookie| cookie.value().to_owned());
 
-    println!("Cookie: {:?}", poultry_farm_cookie);
     match poultry_farm_cookie {
         Some(cookie) => {
             let query_sessions = sqlx::query("SELECT * FROM sessions WHERE session_id = $1")
@@ -29,7 +28,7 @@ pub async fn validate<B>(
                 Ok(_) => next.run(request).await,
                 Err(_) => (
                     StatusCode::FORBIDDEN,
-                    "Forbidden! Nooon-sense👀".to_string(),
+                    "Forbidden!".to_string(),
                 )
                     .into_response(),
             }
@@ -37,7 +36,7 @@ pub async fn validate<B>(
         None => {
             (
             StatusCode::FORBIDDEN,
-            "Forbidden! Nooon-sense👀".to_string(),
+            "Forbidden!".to_string(),
         )
             .into_response()},
     }
