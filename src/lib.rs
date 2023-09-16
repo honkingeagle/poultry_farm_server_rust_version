@@ -1,7 +1,7 @@
 mod email;
-mod farm;
 mod middleware;
-mod user;
+mod auth;
+mod resources;
 
 use axum::{
     Router,
@@ -21,6 +21,7 @@ use axum::{
 use sqlx::{Pool, Postgres};
 use tower_http::cors::CorsLayer;
 use std::sync::Arc;
+use resources::farm;
 
 pub struct AppState {
     pool: Pool<Postgres>,
@@ -51,7 +52,7 @@ pub fn create_router(state: AppState) -> Router {
         .allow_credentials(true);
 
     Router::new()
-        .nest("/users", user::user_router())
+        .nest("/users", auth::user_router())
         .nest("/farms", farm::farm_router(Arc::clone(&new_state)))
         .with_state(Arc::clone(&new_state))
         .layer(cors)
