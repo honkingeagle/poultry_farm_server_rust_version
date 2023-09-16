@@ -1,10 +1,17 @@
 use poultry_farm_server::AppState;
 use shuttle_secrets::SecretStore;
+// use shuttle_shared_db::PgPool;
 use sqlx::postgres::PgPoolOptions;
 use std::process;
 
 #[shuttle_runtime::main]
-async fn axum(#[shuttle_secrets::Secrets] secrets: SecretStore) -> shuttle_axum::ShuttleAxum {
+async fn axum(
+    #[shuttle_secrets::Secrets] secrets: SecretStore,
+    // #[shuttle_shared_db::Postgres] _: PgPool,
+) -> shuttle_axum::ShuttleAxum {
+
+    // This pool is for development only.
+
     let pool = PgPoolOptions::new()
         .max_connections(5)
         .connect(&secrets.get("DATABASE_URL").unwrap())
@@ -22,7 +29,6 @@ async fn axum(#[shuttle_secrets::Secrets] secrets: SecretStore) -> shuttle_axum:
     let smtp_email = secrets.get("SMTP_EMAIL").unwrap();
     let smtp_password = secrets.get("SMTP_PASSWORD").unwrap();
     let frontend_url = secrets.get("DEV_FRONTEND_URL").unwrap();
-    // Changed backed to AppState::new()
     let state = AppState::new(pool, smtp_email, smtp_password, frontend_url);
 
     let router = poultry_farm_server::create_router(state);
