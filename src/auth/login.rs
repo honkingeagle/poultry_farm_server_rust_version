@@ -1,17 +1,19 @@
 use super::User;
 use crate::SharedState;
 use axum::{
+    Json,
     extract::{self, State},
     http::StatusCode,
 };
 use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
 use sqlx::Row;
+use super::LoggedUser;
 
 pub async fn login(
     State(state): State<SharedState>,
-    jar: CookieJar,
+    _jar: CookieJar,
     extract::Json(user): extract::Json<User>,
-) -> Result<(StatusCode, CookieJar), (StatusCode, String)> {
+) -> Result<(StatusCode, Json<LoggedUser>), (StatusCode, String)> {
     let query = sqlx::query("SELECT * FROM users AS u WHERE u.email = $1")
         .bind(user.email)
         .fetch_optional(&state.pool)
@@ -21,6 +23,7 @@ pub async fn login(
         Ok(result) => match result {
             Some(queried_user_result) => {
                 let password: String = queried_user_result.get("password");
+                let email: String = queried_user_result.get("email");
                 let user_id: i32 = queried_user_result.get("id");
                 let active: bool = queried_user_result.get("active");
 
@@ -42,14 +45,14 @@ pub async fn login(
                         .await
                         .expect("Unable to insert session");
     
-                        let cookie = Cookie::build("crusty_chicken", session_id.to_string())
+                        let _cookie = Cookie::build("crusty_chicken", session_id.to_string())
                             .secure(true)
                             .same_site(SameSite::None)
                             .http_only(true)
                             .path("/")
                             .finish();
     
-                        Ok((StatusCode::OK, jar.add(cookie)))
+                        Ok((StatusCode::OK, Json(LoggedUser {id: user_id, email: email})))
                     } else {
                         Err((StatusCode::BAD_REQUEST, "Incorrect password".to_string()))
                     }
